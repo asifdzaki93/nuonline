@@ -1,7 +1,7 @@
-import fetch from 'node-fetch';
-import cheerio from 'cheerio';
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   try {
     const response = await fetch('https://www.nu.or.id/bahtsul-masail');
     const html = await response.text();
@@ -44,4 +44,4 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });
   }
-} 
+}; 
