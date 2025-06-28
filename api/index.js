@@ -34,6 +34,8 @@ module.exports = async (req, res) => {
         }
       };
 
+      console.log('MIDTRANS_SERVER_KEY:', MIDTRANS_SERVER_KEY);
+
       const response = await fetch(MIDTRANS_BASE_URL, {
         method: 'POST',
         headers: {
