@@ -1,0 +1,17 @@
+{
+  "name": "nuonline-starter",
+  "version": "1.0.0",
+  "description": "Starter app Node.js untuk di-host di Vercel",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": ["starter", "nodejs", "vercel"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+} 
