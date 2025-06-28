@@ -8,31 +8,24 @@ module.exports = async (req, res) => {
     const $ = cheerio.load(html);
     const berita = [];
 
-    $('.BahtsulMasailListItem, .bahtsul-masail-list-item, .bahtsul-masail-list .item, .bahtsul-masail-list li').each((i, el) => {
-      const title = $(el).find('a').first().text().trim();
-      const link = $(el).find('a').first().attr('href');
-      const summary = $(el).find('p').text().trim();
-      if (title && link) {
+    // Selector baru berdasarkan struktur HTML yang dikirim user
+    // Setiap berita ada di div.border-gray2.flex.w-full.border-b-2
+    $('div.border-gray2.flex.w-full.border-b-2').each((i, el) => {
+      const link = $(el).find('a[href^="https://islam.nu.or.id/bahtsul-masail/"]').first().attr('href');
+      const title = $(el).find('h2, h1').first().text().trim();
+      const summary = $(el).find('p.medium.font-inter.mt-2.text-sm').first().text().trim();
+      const date = $(el).find('p.medium.font-inter.mt-2.text-xs').first().text().trim();
+      const img = $(el).find('img').first().attr('src');
+      if (link && title) {
         berita.push({
           title,
-          link: link.startsWith('http') ? link : `https://www.nu.or.id${link}`,
-          summary
+          link,
+          summary,
+          date,
+          img
         });
       }
     });
-
-    if (berita.length === 0) {
-      $('.headline-list li').each((i, el) => {
-        const title = $(el).find('a').first().text().trim();
-        const link = $(el).find('a').first().attr('href');
-        if (title && link) {
-          berita.push({
-            title,
-            link: link.startsWith('http') ? link : `https://www.nu.or.id${link}`
-          });
-        }
-      });
-    }
 
     res.status(200).json({
       status: 'success',
