@@ -10,7 +10,10 @@
   "keywords": ["starter", "nodejs", "vercel"],
   "author": "",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^3.3.2"
+  },
   "devDependencies": {
     "nodemon": "^3.0.0"
   }
