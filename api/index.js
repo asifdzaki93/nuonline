@@ -5,6 +5,9 @@ const cheerio = require('cheerio');
 const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY;
 const MIDTRANS_BASE_URL = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
 
+// Tambahkan log untuk debug env
+console.log('MIDTRANS_SERVER_KEY:', MIDTRANS_SERVER_KEY);
+
 const base64ServerKey = Buffer.from(MIDTRANS_SERVER_KEY + ':').toString('base64');
 
 module.exports = async (req, res) => {
