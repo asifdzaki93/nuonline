@@ -7,14 +7,18 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": ["starter", "nodejs", "vercel"],
+  "keywords": [
+    "starter",
+    "nodejs",
+    "vercel"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.0"
   }
-} 
+}
