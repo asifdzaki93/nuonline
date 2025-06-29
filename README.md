@@ -47,11 +47,11 @@ Secara default, Vercel akan menjalankan perintah `npm start`.
 
 Setelah deploy, gunakan URL berikut di konfigurasi Midtrans:
 
-- **Finish URL**: `https://your-domain.vercel.app/api/payment/finish`
-- **Error URL**: `https://your-domain.vercel.app/api/payment/error`
-- **Pending URL**: `https://your-domain.vercel.app/api/payment/pending`
-- **Cancel URL**: `https://your-domain.vercel.app/api/payment/cancel`
-- **Notification URL**: `https://your-domain.vercel.app/api/payment/notification`
+- **Finish URL**: `https://nuonline-ochre.vercel.app/api/payment/finish`
+- **Error URL**: `https://nuonline-ochre.vercel.app/api/payment/error`
+- **Pending URL**: `https://nuonline-ochre.vercel.app/api/payment/pending`
+- **Cancel URL**: `https://nuonline-ochre.vercel.app/api/payment/cancel`
+- **Notification URL**: `https://nuonline-ochre.vercel.app/api/payment/notification`
 
 ## Logging
 

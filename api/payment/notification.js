@@ -1,3 +1,12 @@
+const admin = require('firebase-admin');
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: 'https://lazisnew.firebaseio.com',
+  });
+}
+const db = admin.firestore();
+
 module.exports = async (req, res) => {
   try {
     // Log notification data dari Midtrans
@@ -40,27 +49,72 @@ module.exports = async (req, res) => {
     // }
 
     // Proses berdasarkan status transaksi
+    let shouldSave = false;
+    let statusToSave = transaction_status;
     switch (transaction_status) {
       case 'capture':
       case 'settlement':
         console.log('✅ Payment successful');
-        // await processSuccessfulPayment(req.body);
+        shouldSave = true;
         break;
-      
       case 'pending':
         console.log('⏳ Payment pending');
-        // await processPendingPayment(req.body);
+        shouldSave = true;
         break;
-      
       case 'deny':
       case 'expire':
       case 'cancel':
         console.log('❌ Payment failed/cancelled');
-        // await processFailedPayment(req.body);
+        shouldSave = true;
         break;
-      
       default:
         console.log('❓ Unknown transaction status:', transaction_status);
+    }
+
+    if (shouldSave) {
+      // Ambil data custom dari order_id jika ada (misal: userId, campaignId, dsb)
+      // Format order_id: DONASI-<timestamp>-<userId>-<campaignId>
+      let userId = null;
+      let campaignId = null;
+      let campaignName = null;
+      let category = null;
+      let note = null;
+      try {
+        // Jika order_id custom, parse userId/campaignId
+        // (Implementasi parsing sesuai format order_id yang Anda buat di Flutter)
+        // Contoh: DONASI-<timestamp>-<userId>-<campaignId>
+        const parts = order_id.split('-');
+        if (parts.length >= 4) {
+          userId = parts[2];
+          campaignId = parts[3];
+        }
+      } catch (e) {
+        console.log('Gagal parsing order_id:', e);
+      }
+      // Data tambahan dari custom_fields jika dikirim dari Flutter
+      if (req.body.custom_fields) {
+        campaignName = req.body.custom_fields.campaignName || null;
+        category = req.body.custom_fields.category || null;
+        note = req.body.custom_fields.note || null;
+      }
+      // Simpan ke Firestore (idempotent by order_id)
+      const trxRef = db.collection('transactions').doc(order_id);
+      await trxRef.set({
+        orderId: order_id,
+        userId: userId,
+        campaignId: campaignId,
+        campaignName: campaignName,
+        category: category,
+        amount: Number(gross_amount),
+        status: statusToSave,
+        paymentType: payment_type,
+        midtransTransactionId: transaction_id,
+        fraudStatus: fraud_status,
+        transactionTime: transaction_time,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        note: note,
+      }, { merge: true });
+      console.log('💾 Transaksi disimpan/diupdate di Firestore:', order_id);
     }
 
     // Simpan notification ke database (implementasi sesuai kebutuhan)
